@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine?</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f2;
+            color: #ff4081;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .container {
+            margin-top: 50px;
+            padding-bottom: 50px;
+        }
+        img.profile {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.7);
+        }
+        h1 {
+            font-size: 2.5em;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #ff80ab; }
+            100% { text-shadow: 0 0 20px #ff4081; }
+        }
+        .heart {
+            font-size: 3em;
+            animation: heartbeat 1s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .message, .step, .response {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        .step, .response {
+            display: none;
+        }
+        .btn {
+            background-color: #ff4081;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .joy {
+            font-size: 3em;
+            color: #ff4081;
+            animation: joy 1s infinite alternate;
+        }
+        @keyframes joy {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.3); }
+        }
+        .broken-heart {
+            font-size: 3em;
+            color: red;
+            animation: shake 0.5s infinite alternate;
+        }
+        @keyframes shake {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+        .countdown {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #history {
+            display: none;
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: #ff4081;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+    </style>
+    <script>
+        let step = 0;
+        function nextStep() {
+            let steps = document.getElementsByClassName('step');
+            if (step < steps.length) {
+                steps[step].style.display = 'block';
+                step++;
+                if (step === steps.length) {
+                    setTimeout(() => {
+                        document.getElementById('response-options').style.display = 'block';
+                    }, 2000);
+                }
+            }
+        }
+        function showResponse(answer) {
+            document.getElementById('response-options').style.display = 'none';
+            localStorage.setItem('loveResponse', answer);
+            if (answer === 'yes') {
+                document.getElementById('joyful-response').style.display = 'block';
+            } else {
+                document.getElementById('sad-response').style.display = 'block';
+            }
+        }
+        function startCountdown() {
+            let count = 5;
+            let countdownElement = document.getElementById('countdown');
+            countdownElement.innerHTML = count;
+            let interval = setInterval(() => {
+                count--;
+                countdownElement.innerHTML = count;
+                if (count === 0) {
+                    clearInterval(interval);
+                    countdownElement.style.display = 'none';
+                    document.getElementById('start-content').style.display = 'block';
+                }
+            }, 1000);
+        }
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'a') {
+                let savedResponse = localStorage.getItem('loveResponse');
+                if (savedResponse) {
+                    document.getElementById('history').innerText = `History: Response was "${savedResponse}"`;
+                } else {
+                    document.getElementById('history').innerText = "No response recorded yet.";
+                }
+                document.getElementById('history').style.display = 'block';
+            }
+        });
+    </script>
+</head>
+<body onload="startCountdown()">
+    <div class="container">
+        <h1>Aaru ❤️</h1>
+        
+        <div class="countdown" id="countdown"></div>
+        
+        <div id="start-content" style="display: none;">
+            <div class="heart">Oyye cutie ispe click karo ❤️</div>
+            <p class="step">"Every moment with you is a dream come true."</p>
+            <p class="step">"You are the missing piece of my heart, my forever and always."</p>
+            <p class="step">"With you, I found love, happiness, and my best friend."</p>
+            <p class="step">"I never believed in fate until I met you"</p>
+            <p class="step">"Will you be my forever? 💍❤️"</p>
+            
+            <button class="btn" onclick="nextStep()">Next</button>
+            
+            <div id="response-options" class="response">
+                <p>What is your answer? 😊</p>
+                <button class="btn" onclick="showResponse('yes')">Yes 💖</button>
+                <button class="btn" onclick="showResponse('no')">No 💔</button>
+            </div>
+
+            <div id="joyful-response" class="response">
+                <p class="joy">🎉 love u too thank you thank you for the gift. 💖🎊</p>
+            </div>
+
+            <div id="sad-response" class="response">
+                <p class="broken-heart">💔 It’s okay, but I will always love you, hehehe! 💔</p>
+            </div>
+        </div>
+        <div id="history"></div>
+    </div>
+</body>
+</html>
